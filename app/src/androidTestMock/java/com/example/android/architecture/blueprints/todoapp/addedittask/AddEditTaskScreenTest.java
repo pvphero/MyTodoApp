@@ -164,6 +164,7 @@ public class AddEditTaskScreenTest {
                 description.appendValue(resourceId);
             }
 
+
             @Override
             protected boolean matchesSafely(Toolbar toolbar) {
                 CharSequence expectedText = "";

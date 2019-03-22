@@ -1,0 +1,97 @@
+apply plugin: "org.sonarqube"
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
+        classpath('com.dicedmelon.gradle:jacoco-android:0.1.2') {
+            exclude group: 'org.codehaus.groovy'
+        }
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.language", "java"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectName", "todoApp-android"
+        property "sonar.projectKey", "com.example.android.architecture.blueprints.todomvp:todoApp-android"
+        property "sonar.projectVersion", "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
+        property "sonar.junit.reportsPath", "build/test-results/testUiOfficialJacocoUnitTest"
+        property "sonar.jacoco.reportPath", "build/jacoco/testUiOfficialJacocoUnitTest.exec"
+        property "sonar.exclusions", "${rootProject.ext.excludes}"
+        property "sonar.core.codeCoveragePlugin","jacoco"
+    }
+}
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+// Define versions in a single place
+ext {
+
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+    versionCode = 1
+
+    // Sdk and tools
+    // Support library and architecture components support minSdk 14 and above.
+    minSdkVersion = 14
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.2'
+
+    // App dependencies
+    supportLibraryVersion = '26.1.0'
+    guavaVersion = '18.0'
+    junitVersion = '4.12'
+    mockitoVersion = '1.10.19'
+    powerMockito = '1.6.2'
+    hamcrestVersion = '1.3'
+    runnerVersion = '1.0.1'
+    rulesVersion = '1.0.1'
+    espressoVersion = '3.0.1'
+    roomVersion = "1.0.0"
+
+    excludes = [
+            // Platform classes  '**/*Test*.*',
+            '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*', 'androidx/**/*.*',
+            // Ui, View, RecyclerView.Adapter
+            '**/*Fragment.*', '**/*Activity.*', '**/ui/**', '**/view/**', '**/adapter/**', '**/*View.*', '**/*Dialog.*', '**/dialog/**/*.*',
+            // Application
+            "**/App.*",
+            // BindingAdapter
+            '**/binding/**',
+            // Java Entity
+            // '**/api/**', '**/entity/**', '**/*Entity.*',
+            // Generated code from Android Data Binding
+            "**/databinding/**", '**/DataBinderMapperImpl.*', '**/BR.*', "**/generated/callback/**",
+            // Generated code from Butter Knife.
+            '**/*_ViewBinding.*',
+            // Injection code and Generated code from Dagger Android
+            '**/injection/**', '**/*_MembersInjector.*', '**/*_Factory.*',
+            // Generated code from GeneratedAdapter of Lifecycle
+            '**/*_LifecycleAdapter.*',
+            // Generated code by RoomProcessor
+            '**/*Database_Impl.*', '**/*Dao_Impl.*', '**/database/**',
+            // Generated code by Navigation
+            '**/*Directions.*', '**/*Args.*']
+
+}
